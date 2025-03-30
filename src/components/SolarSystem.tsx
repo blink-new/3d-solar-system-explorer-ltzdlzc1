@@ -1,6 +1,6 @@
 
 import { useRef, useMemo, useCallback } from 'react'
-import { useFrame, useLoader } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import { planets } from '../data/planets'
 import { Planet as PlanetType } from '../types'
 import * as THREE from 'three'
@@ -12,24 +12,16 @@ interface SolarSystemProps {
 export function SolarSystem({ onPlanetSelect }: SolarSystemProps) {
   const groupRef = useRef<THREE.Group>(null)
 
-  // Pre-load and memoize all textures
-  const textures = useMemo(() => 
-    planets.map(planet => 
-      useLoader(THREE.TextureLoader, planet.texture)
-    ),
-    [] // Empty deps since planet textures don't change
-  )
-
   // Memoize materials to prevent unnecessary recreations
   const materials = useMemo(() => 
-    textures.map(texture => 
+    planets.map(planet => 
       new THREE.MeshStandardMaterial({
-        map: texture,
+        color: planet.color,
         metalness: 0.4,
         roughness: 0.7,
       })
     ),
-    [textures]
+    []
   )
 
   // Memoize geometries
@@ -37,7 +29,7 @@ export function SolarSystem({ onPlanetSelect }: SolarSystemProps) {
     planets.map(planet => 
       new THREE.SphereGeometry(planet.radius, 32, 32)
     ),
-    [] // Empty deps since planet radii don't change
+    []
   )
 
   // Create and memoize orbit points
@@ -56,7 +48,7 @@ export function SolarSystem({ onPlanetSelect }: SolarSystemProps) {
       geometry.setAttribute('position', new THREE.Float32BufferAttribute(points, 3))
       return geometry
     }),
-    [] // Empty deps since orbit radii don't change
+    []
   )
 
   // Memoize orbit material
@@ -76,7 +68,11 @@ export function SolarSystem({ onPlanetSelect }: SolarSystemProps) {
   )
 
   const sunMaterial = useMemo(() => 
-    new THREE.MeshBasicMaterial({ color: '#ffd700' }),
+    new THREE.MeshBasicMaterial({ 
+      color: '#ffd700',
+      emissive: '#ff8c00',
+      emissiveIntensity: 0.5,
+    }),
     []
   )
 
@@ -93,16 +89,13 @@ export function SolarSystem({ onPlanetSelect }: SolarSystemProps) {
     planets.forEach((planet, index) => {
       const planetGroup = groupRef.current?.children[index + 1] as THREE.Group
       if (planetGroup) {
-        // Calculate position only once
         const angle = elapsedTime * planet.orbitSpeed
         const x = Math.cos(angle) * planet.orbitRadius
         const z = Math.sin(angle) * planet.orbitRadius
         
-        // Update position directly instead of using .set()
         planetGroup.position.x = x
         planetGroup.position.z = z
         
-        // Rotate planet (first child of group is the planet mesh)
         const planetMesh = planetGroup.children[0]
         if (planetMesh) {
           planetMesh.rotation.y += planet.rotationSpeed
@@ -121,14 +114,17 @@ export function SolarSystem({ onPlanetSelect }: SolarSystemProps) {
       {/* Planets */}
       {planets.map((planet, index) => (
         <group key={planet.id} position={[planet.orbitRadius, 0, 0]}>
-          {/* Planet */}
           <mesh
             geometry={planetGeometries[index]}
             material={materials[index]}
             onClick={(e) => handlePlanetClick(e, planet)}
-          />
-
-          {/* Orbit line */}
+          >
+            <meshStandardMaterial
+              color={planet.color}
+              metalness={0.4}
+              roughness={0.7}
+            />
+          </mesh>
           <line geometry={orbitGeometries[index]} material={orbitMaterial} />
         </group>
       ))}
