@@ -9,7 +9,7 @@ export const planets: Planet[] = [
     orbitRadius: 4,
     orbitSpeed: 0.48,
     rotationSpeed: 0.01,
-    color: '#A0522D'
+    color: '#A67C52'
   },
   {
     id: 'venus',
@@ -18,7 +18,7 @@ export const planets: Planet[] = [
     orbitRadius: 7,
     orbitSpeed: 0.35,
     rotationSpeed: 0.008,
-    color: '#DEB887'
+    color: '#E6B87C'
   },
   {
     id: 'earth',
@@ -27,7 +27,7 @@ export const planets: Planet[] = [
     orbitRadius: 10,
     orbitSpeed: 0.29,
     rotationSpeed: 0.01,
-    color: '#4169E1'
+    color: '#4B9CD3'
   },
   {
     id: 'mars',
@@ -36,7 +36,7 @@ export const planets: Planet[] = [
     orbitRadius: 13,
     orbitSpeed: 0.24,
     rotationSpeed: 0.009,
-    color: '#CD5C5C'
+    color: '#E27B58'
   },
   {
     id: 'jupiter',
@@ -45,7 +45,7 @@ export const planets: Planet[] = [
     orbitRadius: 18,
     orbitSpeed: 0.13,
     rotationSpeed: 0.004,
-    color: '#DEB887'
+    color: '#C88B3A'
   },
   {
     id: 'saturn',
@@ -54,7 +54,7 @@ export const planets: Planet[] = [
     orbitRadius: 23,
     orbitSpeed: 0.09,
     rotationSpeed: 0.004,
-    color: '#F4A460'
+    color: '#E4B784'
   },
   {
     id: 'uranus',
@@ -63,7 +63,7 @@ export const planets: Planet[] = [
     orbitRadius: 27,
     orbitSpeed: 0.06,
     rotationSpeed: 0.003,
-    color: '#87CEEB'
+    color: '#93B8BE'
   },
   {
     id: 'neptune',
@@ -72,6 +72,6 @@ export const planets: Planet[] = [
     orbitRadius: 30,
     orbitSpeed: 0.05,
     rotationSpeed: 0.003,
-    color: '#4169E1'
+    color: '#3E54E8'
   }
 ]

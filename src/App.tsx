@@ -21,7 +21,7 @@ export default function App() {
           camera={{ position: [0, 20, 35], fov: 75 }}
           className="w-full h-full"
           dpr={[1, 2]}
-          performance={{ min: 0.5 }}
+          shadows
         >
           <AdaptiveDpr pixelated />
           <AdaptiveEvents />
@@ -33,7 +33,8 @@ export default function App() {
             factor={7} 
             saturation={0} 
           />
-          <ambientLight intensity={0.1} />
+          <ambientLight intensity={0.3} />
+          <pointLight position={[10, 10, 10]} intensity={0.5} />
           <Suspense fallback={null}>
             <SolarSystem onPlanetSelect={handlePlanetSelect} />
           </Suspense>

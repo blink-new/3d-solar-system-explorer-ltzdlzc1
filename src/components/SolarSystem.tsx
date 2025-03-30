@@ -12,13 +12,15 @@ interface SolarSystemProps {
 export function SolarSystem({ onPlanetSelect }: SolarSystemProps) {
   const groupRef = useRef<THREE.Group>(null)
 
-  // Memoize materials to prevent unnecessary recreations
+  // Memoize materials with improved visibility
   const materials = useMemo(() => 
     planets.map(planet => 
       new THREE.MeshStandardMaterial({
         color: planet.color,
-        metalness: 0.4,
-        roughness: 0.7,
+        metalness: 0.1,
+        roughness: 0.8,
+        emissive: planet.color,
+        emissiveIntensity: 0.2,
       })
     ),
     []
@@ -51,27 +53,29 @@ export function SolarSystem({ onPlanetSelect }: SolarSystemProps) {
     []
   )
 
-  // Memoize orbit material
+  // Memoize orbit material with improved visibility
   const orbitMaterial = useMemo(() => 
     new THREE.LineBasicMaterial({
       color: '#ffffff',
-      opacity: 0.2,
+      opacity: 0.3,
       transparent: true,
     }),
     []
   )
 
-  // Memoize sun geometry and material
+  // Memoize sun geometry and material with stronger emission
   const sunGeometry = useMemo(() => 
     new THREE.SphereGeometry(2, 32, 32),
     []
   )
 
   const sunMaterial = useMemo(() => 
-    new THREE.MeshBasicMaterial({ 
-      color: '#ffd700',
-      emissive: '#ff8c00',
-      emissiveIntensity: 0.5,
+    new THREE.MeshStandardMaterial({ 
+      color: '#FDB813',
+      emissive: '#FDB813',
+      emissiveIntensity: 1,
+      metalness: 0,
+      roughness: 0.7,
     }),
     []
   )
@@ -108,7 +112,7 @@ export function SolarSystem({ onPlanetSelect }: SolarSystemProps) {
     <group ref={groupRef}>
       {/* Sun */}
       <mesh geometry={sunGeometry} material={sunMaterial}>
-        <pointLight intensity={2} distance={100} decay={2} />
+        <pointLight intensity={1.5} distance={100} decay={2} color="#ffffff" />
       </mesh>
 
       {/* Planets */}
@@ -118,13 +122,9 @@ export function SolarSystem({ onPlanetSelect }: SolarSystemProps) {
             geometry={planetGeometries[index]}
             material={materials[index]}
             onClick={(e) => handlePlanetClick(e, planet)}
-          >
-            <meshStandardMaterial
-              color={planet.color}
-              metalness={0.4}
-              roughness={0.7}
-            />
-          </mesh>
+            castShadow
+            receiveShadow
+          />
           <line geometry={orbitGeometries[index]} material={orbitMaterial} />
         </group>
       ))}
